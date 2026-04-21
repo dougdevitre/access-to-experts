@@ -1,0 +1,123 @@
+{
+  "id": "pb_01HZK8R4PVMOLEGAL03EXAMPLE",
+  "version": "1.2.0",
+  "title": "Missouri Parenting Plan Modification — Preparation Packet",
+  "description": "Prepares a Missouri parent to request a parenting-plan modification under RSMo 452.410 by organizing relevant facts, gathering required documentation, and producing a preparation packet for an attorney or self-representation. **Educational preparation support, not legal advice. Statutory citations may change.**",
+  "vertical": "family-law",
+  "authorExpertId": "exp_01HZK8R4PVEXPERTANCHOR01",
+  "coAuthorExpertIds": ["exp_01HZK8R4PVEXPERTCERT001"],
+  "institutionalSponsorId": "org_01HZK8R4PVORGMOBAR0001",
+  "status": "certified",
+  "tier": "anchor",
+  "jurisdictionTags": [
+    { "level": "state", "code": "US-MO", "scopeNote": "Missouri-specific. Other states have different modification standards." }
+  ],
+  "practiceAreas": ["family-law.parenting-plan", "family-law.modification"],
+  "tags": ["missouri", "parenting-plan", "modification", "preparation"],
+  "targetRole": ["parent", "attorney", "advocate"],
+  "estimatedDurationMinutes": 45,
+  "creditCost": { "base": 8, "perStep": 0, "completionBonus": 2 },
+  "licensing": {
+    "contentLicense": "a2x-expert-content-v1",
+    "expertRevenueShareBps": 6000,
+    "institutionalShareBps": 1000,
+    "exclusivity": "platform-exclusive"
+  },
+  "steps": [
+    {
+      "id": "st_jurisdcheck",
+      "order": 0,
+      "type": "checkpoint",
+      "title": "Confirm Missouri jurisdiction",
+      "content": "This playbook is written for Missouri (US-MO). Confirm that Missouri is the state where the current parenting plan was issued or where the child has primary residence. If not, stop and find a jurisdiction-specific playbook."
+    },
+    {
+      "id": "st_currentorder",
+      "order": 1,
+      "type": "form",
+      "title": "Current order details",
+      "content": "Provide information about the current parenting plan.",
+      "expectedInputs": [
+        { "name": "caseNumber", "label": "Case number", "type": "text", "required": false, "piiClassification": "medium" },
+        { "name": "countyCourt", "label": "Missouri county where order was entered", "type": "text", "required": true, "piiClassification": "low" },
+        { "name": "orderDate", "label": "Date of current order", "type": "date", "required": true },
+        { "name": "lastModificationDate", "label": "Date of most recent modification (if any)", "type": "date", "required": false }
+      ]
+    },
+    {
+      "id": "st_changecirc",
+      "order": 2,
+      "type": "form",
+      "title": "Change in circumstances",
+      "content": "Missouri requires a substantial and continuing change in circumstances since the current order. Describe what has changed.",
+      "expectedInputs": [
+        { "name": "changeDescription", "label": "What has changed and when?", "type": "longtext", "required": true, "piiClassification": "medium" },
+        { "name": "changeStart", "label": "Approximate date change began", "type": "date", "required": true },
+        { "name": "impactOnChild", "label": "How does this affect the child's best interests?", "type": "longtext", "required": true, "piiClassification": "medium" }
+      ]
+    },
+    {
+      "id": "st_evidenceinv",
+      "order": 3,
+      "type": "form",
+      "title": "Evidence inventory",
+      "content": "List the documents, messages, records, and witnesses that support the requested modification.",
+      "expectedInputs": [
+        { "name": "documentsList", "label": "Documents (school records, medical, etc.)", "type": "longtext", "required": false, "piiClassification": "medium" },
+        { "name": "communicationsList", "label": "Relevant communications (texts, emails)", "type": "longtext", "required": false, "piiClassification": "medium" },
+        { "name": "witnessesList", "label": "Potential witnesses", "type": "longtext", "required": false, "piiClassification": "medium" }
+      ]
+    },
+    {
+      "id": "st_proposedchange",
+      "order": 4,
+      "type": "form",
+      "title": "Proposed modification",
+      "content": "State specifically what modification you are requesting. Vague requests ('more time') are weaker than specific ones ('alternating weeks plus Wednesday overnights').",
+      "expectedInputs": [
+        { "name": "proposedChange", "label": "Specific modification requested", "type": "longtext", "required": true },
+        { "name": "rationale", "label": "How does this serve the child's best interests?", "type": "longtext", "required": true }
+      ]
+    },
+    {
+      "id": "st_bestinterests",
+      "order": 5,
+      "type": "prompt",
+      "title": "Best-interests analysis",
+      "content": "The assistant will produce a structured analysis mapped to Missouri's statutory best-interests factors. Review carefully and edit before use."
+    },
+    {
+      "id": "st_prepacket",
+      "order": 6,
+      "type": "artifact",
+      "title": "Preparation packet",
+      "content": "Produce a Word document containing: case summary, change-in-circumstances narrative, best-interests analysis, evidence inventory, proposed modification with rationale, and questions for an attorney consultation.",
+      "artifactTemplateId": "at_moprepacket01"
+    }
+  ],
+  "artifactTemplates": [
+    {
+      "id": "at_moprepacket01",
+      "name": "Missouri Parenting Plan Modification Preparation Packet",
+      "format": "docx",
+      "template": "# Missouri Parenting Plan Modification — Preparation Packet\n\n**Case Number:** {{caseNumber}}\n**County:** {{countyCourt}}\n**Current Order Date:** {{orderDate}}\n\n## Change in Circumstances\n\n{{changeDescription}}\n\n**Began:** {{changeStart}}\n\n**Impact on Child:**\n\n{{impactOnChild}}\n\n## Proposed Modification\n\n{{proposedChange}}\n\n**Rationale:** {{rationale}}\n\n## Best-Interests Analysis\n\n{{bestInterestsAnalysis}}\n\n## Evidence Inventory\n\n**Documents:** {{documentsList}}\n\n**Communications:** {{communicationsList}}\n\n**Witnesses:** {{witnessesList}}\n\n## Questions for Attorney Consultation\n\n{{attorneyQuestions}}\n\n---\n\n*Generated via Access To Experts. Educational preparation support, not legal advice. Consult a licensed Missouri attorney before filing.*"
+    }
+  ],
+  "reviewStatus": {
+    "peerReviewedAt": "2026-03-18T12:00:00Z",
+    "reviewerExpertIds": ["exp_01HZK8R4PVEXPERTCERT002"],
+    "lastRegulatoryReviewAt": "2026-03-18T12:00:00Z",
+    "reviewNotes": "Statutory citations verified against current RSMo 452.410. Annual re-review scheduled."
+  },
+  "disclosures": {
+    "notLegalAdvice": true,
+    "additionalDisclosures": [
+      "Missouri statutes can change. Always verify RSMo 452.410 current text before filing.",
+      "Unauthorized practice of law rules prohibit this platform from advising on your specific case. Consult a licensed Missouri attorney."
+    ]
+  },
+  "safetyNotes": "If there is an active safety concern for you or your child, consult a licensed attorney and consider a domestic violence advocate before using this playbook. Filing a modification can sometimes escalate conflict.",
+  "createdAt": "2026-02-10T10:00:00Z",
+  "updatedAt": "2026-04-05T14:30:00Z",
+  "publishedAt": "2026-03-20T09:00:00Z"
+}

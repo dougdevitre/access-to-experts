@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.accesstoexperts.org/expert.schema.json",
+  "title": "Expert",
+  "description": "A verified practitioner or institution authorized to author and maintain playbooks.",
+  "type": "object",
+  "required": [
+    "id",
+    "displayName",
+    "tier",
+    "status",
+    "verticals",
+    "credentials",
+    "createdAt"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^exp_[A-Za-z0-9]{16,}$" },
+    "userId": {
+      "type": ["string", "null"],
+      "pattern": "^usr_[A-Za-z0-9]{16,}$",
+      "description": "Linked platform user account."
+    },
+    "displayName": { "type": "string", "minLength": 2, "maxLength": 140 },
+    "legalName": { "type": "string", "maxLength": 200 },
+    "pronouns": { "type": "string", "maxLength": 40 },
+    "headline": { "type": "string", "maxLength": 200 },
+    "bio": { "type": "string", "maxLength": 4000 },
+    "photoUrl": { "type": "string", "format": "uri" },
+    "tier": {
+      "type": "string",
+      "enum": ["anchor", "certified", "emerging", "pending"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "on_hold", "suspended", "retired"]
+    },
+    "verticals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "family-law",
+          "trial-advocacy",
+          "speaking-business",
+          "civic-government",
+          "mediation-adr",
+          "workforce",
+          "clinical-mental-health",
+          "business-strategy",
+          "education",
+          "other"
+        ]
+      },
+      "minItems": 1
+    },
+    "primaryJurisdictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["level", "code"],
+        "properties": {
+          "level": { "type": "string", "enum": ["country", "state", "province"] },
+          "code": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "credentials": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["type", "issuer", "verifiedAt"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "bar-admission",
+              "medical-license",
+              "clinical-license",
+              "mediator-certification",
+              "professional-association",
+              "academic-degree",
+              "government-role",
+              "institutional-affiliation",
+              "other"
+            ]
+          },
+          "issuer": { "type": "string", "maxLength": 200 },
+          "issuerJurisdiction": { "type": "string" },
+          "identifier": { "type": "string", "maxLength": 100 },
+          "issuedAt": { "type": ["string", "null"], "format": "date" },
+          "expiresAt": { "type": ["string", "null"], "format": "date" },
+          "verifiedAt": { "type": "string", "format": "date-time" },
+          "verificationMethod": {
+            "type": "string",
+            "enum": ["api-lookup", "document-upload", "peer-attestation", "institutional"]
+          },
+          "verificationEvidenceRef": { "type": "string" },
+          "lastMonitoredAt": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "organizationAffiliations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "organizationId": { "type": "string", "pattern": "^org_[A-Za-z0-9]{16,}$" },
+          "role": { "type": "string" },
+          "startDate": { "type": ["string", "null"], "format": "date" },
+          "endDate": { "type": ["string", "null"], "format": "date" },
+          "current": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "specializations": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 100 },
+      "maxItems": 20
+    },
+    "languages": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+      "description": "IETF BCP 47 tags, e.g. en, es-MX, fr-CA."
+    },
+    "revenueShare": {
+      "type": "object",
+      "properties": {
+        "defaultBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000,
+          "description": "Default expert revenue share in basis points."
+        },
+        "payoutMethod": {
+          "type": "string",
+          "enum": ["stripe-connect", "ach", "wire", "institutional-invoice"]
+        },
+        "stripeConnectAccountId": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "governance": {
+      "type": "object",
+      "properties": {
+        "councilMember": { "type": "boolean", "default": false },
+        "peerReviewerFor": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "disciplinaryActions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": { "type": "string", "enum": ["warning", "suspension", "removal"] },
+              "reason": { "type": "string" },
+              "takenAt": { "type": "string", "format": "date-time" },
+              "resolvedAt": { "type": ["string", "null"], "format": "date-time" }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

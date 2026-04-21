@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.accesstoexperts.org/review.schema.json",
+  "title": "Review",
+  "description": "A user-submitted review of a playbook or an expert peer review of another expert's playbook.",
+  "type": "object",
+  "required": ["id", "kind", "targetId", "authorUserId", "createdAt", "status"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^rev_[A-Za-z0-9]{16,}$" },
+    "kind": {
+      "type": "string",
+      "enum": ["user-playbook-review", "expert-peer-review", "institutional-review", "regulatory-review"]
+    },
+    "targetType": {
+      "type": "string",
+      "enum": ["playbook", "expert", "session-outcome"]
+    },
+    "targetId": { "type": "string" },
+    "playbookVersion": {
+      "type": ["string", "null"],
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "sessionId": {
+      "type": ["string", "null"],
+      "pattern": "^sess_[A-Za-z0-9]{16,}$",
+      "description": "For user reviews: the session this review is about."
+    },
+    "authorUserId": { "type": "string", "pattern": "^usr_[A-Za-z0-9]{16,}$" },
+    "authorExpertId": {
+      "type": ["string", "null"],
+      "pattern": "^exp_[A-Za-z0-9]{16,}$",
+      "description": "Present for expert peer reviews."
+    },
+    "rating": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5
+    },
+    "outcomeRating": {
+      "type": "object",
+      "description": "User-reported outcome quality, separate from content rating.",
+      "properties": {
+        "clarity": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "accuracy": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "helpfulness": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "wouldRecommend": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "reviewText": { "type": "string", "maxLength": 5000 },
+    "flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "outdated-information",
+          "jurisdictional-concern",
+          "regulatory-concern",
+          "safety-concern",
+          "accessibility-concern",
+          "factual-error",
+          "content-quality",
+          "other"
+        ]
+      }
+    },
+    "peerReviewDecision": {
+      "type": ["string", "null"],
+      "enum": ["approve", "approve-with-changes", "request-revision", "reject", null]
+    },
+    "peerReviewNotes": { "type": "string", "maxLength": 10000 },
+    "status": {
+      "type": "string",
+      "enum": ["submitted", "under-moderation", "published", "hidden", "removed"]
+    },
+    "verifiedCompletion": {
+      "type": "boolean",
+      "description": "True if author actually completed the playbook in an attached session.",
+      "default": false
+    },
+    "moderationNotes": { "type": "string", "maxLength": 2000 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "publishedAt": { "type": ["string", "null"], "format": "date-time" }
+  },
+  "additionalProperties": false
+}

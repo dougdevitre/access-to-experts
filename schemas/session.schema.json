@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.accesstoexperts.org/session.schema.json",
+  "title": "Session",
+  "description": "A user's execution of a playbook instance. Stores state, step executions, and produced artifacts by reference.",
+  "type": "object",
+  "required": [
+    "id",
+    "userId",
+    "playbookId",
+    "playbookVersion",
+    "status",
+    "startedAt",
+    "creditsCharged",
+    "stepExecutions"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^sess_[A-Za-z0-9]{16,}$" },
+    "userId": { "type": "string", "pattern": "^usr_[A-Za-z0-9]{16,}$" },
+    "organizationId": {
+      "type": ["string", "null"],
+      "pattern": "^org_[A-Za-z0-9]{16,}$",
+      "description": "If present, session is billed to the organization."
+    },
+    "playbookId": { "type": "string", "pattern": "^pb_[A-Za-z0-9]{16,}$" },
+    "playbookVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "status": {
+      "type": "string",
+      "enum": ["active", "paused", "completed", "abandoned", "errored"]
+    },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "completedAt": { "type": ["string", "null"], "format": "date-time" },
+    "lastActivityAt": { "type": "string", "format": "date-time" },
+    "currentStepId": {
+      "type": ["string", "null"],
+      "pattern": "^st_[A-Za-z0-9]{8,}$"
+    },
+    "creditsCharged": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total credits deducted from user/org ledger for this session to date."
+    },
+    "stepExecutions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stepId", "startedAt", "status"],
+        "properties": {
+          "stepId": { "type": "string", "pattern": "^st_[A-Za-z0-9]{8,}$" },
+          "startedAt": { "type": "string", "format": "date-time" },
+          "completedAt": { "type": ["string", "null"], "format": "date-time" },
+          "status": {
+            "type": "string",
+            "enum": ["in_progress", "completed", "skipped", "errored"]
+          },
+          "inputs": {
+            "type": "object",
+            "description": "Field name to value map. Encrypted at rest if any field has piiClassification >= medium.",
+            "additionalProperties": true
+          },
+          "outputRefs": {
+            "type": "array",
+            "description": "References to artifacts produced by this step. Content stored in S3; these are IDs only.",
+            "items": { "type": "string", "pattern": "^art_[A-Za-z0-9]{16,}$" }
+          },
+          "creditsCharged": { "type": "integer", "minimum": 0 },
+          "modelInvocationIds": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Anthropic/other model invocation IDs for audit trail."
+          },
+          "errorCode": { "type": ["string", "null"] },
+          "errorMessage": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "jurisdiction": { "type": "string" },
+        "role": { "type": "string" },
+        "referrer": { "type": "string" },
+        "deviceClass": { "type": "string", "enum": ["web", "mobile", "api"] }
+      },
+      "additionalProperties": true
+    },
+    "retentionPolicy": {
+      "type": "object",
+      "required": ["retainUntil", "basis"],
+      "properties": {
+        "retainUntil": { "type": "string", "format": "date-time" },
+        "basis": {
+          "type": "string",
+          "enum": ["user-default", "user-extended", "enterprise-policy", "legal-hold"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

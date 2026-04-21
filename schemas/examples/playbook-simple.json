@@ -1,0 +1,91 @@
+{
+  "id": "pb_01HZK8R4PVEXAMPLESIMPLE01",
+  "version": "1.0.0",
+  "title": "Write a Court-Neutral Incident Note",
+  "subtitle": "Turn a stressful moment into a documented, share-safe record.",
+  "description": "A short guided workflow for parents and caregivers who need to document a co-parenting incident in a way that is calm, factual, and usable in a family-court setting. Produces a timestamped note with observable facts, impact on the child, and next steps. **This is educational documentation support, not legal advice.**",
+  "vertical": "family-law",
+  "authorExpertId": "exp_01HZK8R4PVEXPERTANCHOR01",
+  "status": "certified",
+  "tier": "anchor",
+  "jurisdictionTags": [
+    { "level": "global", "code": "GLOBAL", "scopeNote": "General documentation principles apply broadly. Evidentiary rules vary." }
+  ],
+  "practiceAreas": ["family-law.documentation", "family-law.co-parenting"],
+  "tags": ["documentation", "incident", "trauma-informed", "court-neutral"],
+  "targetRole": ["parent", "advocate"],
+  "estimatedDurationMinutes": 12,
+  "creditCost": { "base": 2, "perStep": 0, "completionBonus": 1 },
+  "licensing": {
+    "contentLicense": "a2x-expert-content-v1",
+    "expertRevenueShareBps": 7000,
+    "exclusivity": "platform-exclusive"
+  },
+  "steps": [
+    {
+      "id": "st_safetycheck1",
+      "order": 0,
+      "type": "checkpoint",
+      "title": "Safety check",
+      "content": "Before documenting, confirm you are in a safe space and your child is safe. If there is an immediate danger, pause this playbook and contact your local emergency services."
+    },
+    {
+      "id": "st_factgather1",
+      "order": 1,
+      "type": "form",
+      "title": "What happened?",
+      "content": "Capture the facts as you observed them. Stick to what you saw, heard, and what the child said — not interpretations.",
+      "expectedInputs": [
+        { "name": "incidentDate", "label": "Date and time of incident", "type": "datetime", "required": true, "piiClassification": "low" },
+        { "name": "location", "label": "Where did it happen?", "type": "text", "required": true, "piiClassification": "medium" },
+        { "name": "whoWasPresent", "label": "Who was present?", "type": "text", "required": true, "piiClassification": "medium" },
+        { "name": "whatHappened", "label": "What happened? (observable facts only)", "type": "longtext", "required": true, "piiClassification": "medium" },
+        { "name": "childImpact", "label": "How did this affect the child?", "type": "longtext", "required": false, "piiClassification": "medium" }
+      ]
+    },
+    {
+      "id": "st_neutralrewrite",
+      "order": 2,
+      "type": "prompt",
+      "title": "Generate court-neutral rewrite",
+      "content": "The assistant will convert your notes into a calm, child-centered, court-neutral narrative. Review carefully before saving."
+    },
+    {
+      "id": "st_reviewedit",
+      "order": 3,
+      "type": "form",
+      "title": "Review and edit",
+      "content": "Check for: names spelled correctly, dates accurate, no accusations or inflammatory language, child's perspective centered.",
+      "expectedInputs": [
+        { "name": "approvedNarrative", "label": "Your approved narrative", "type": "longtext", "required": true, "piiClassification": "medium" }
+      ]
+    },
+    {
+      "id": "st_artifactgen1",
+      "order": 4,
+      "type": "artifact",
+      "title": "Generate documentation file",
+      "content": "Produce a timestamped Word document you can save, print, or share with counsel.",
+      "artifactTemplateId": "at_incidentdoc01"
+    }
+  ],
+  "artifactTemplates": [
+    {
+      "id": "at_incidentdoc01",
+      "name": "Incident Documentation",
+      "format": "docx",
+      "template": "# Incident Documentation\n\n**Date/Time:** {{incidentDate}}\n**Location:** {{location}}\n**Present:** {{whoWasPresent}}\n\n## Summary\n\n{{approvedNarrative}}\n\n## Child Impact\n\n{{childImpact}}\n\n---\n\n*Generated via Access To Experts. Not legal advice.*",
+      "description": "Standard incident documentation output."
+    }
+  ],
+  "disclosures": {
+    "notLegalAdvice": true,
+    "additionalDisclosures": [
+      "Evidentiary admissibility varies by jurisdiction. Consult a licensed attorney for case-specific guidance."
+    ]
+  },
+  "safetyNotes": "If the incident involved suspected abuse, do not rely on this playbook alone — contact your local child protective services hotline or a licensed advocate.",
+  "createdAt": "2026-03-15T10:00:00Z",
+  "updatedAt": "2026-04-01T14:30:00Z",
+  "publishedAt": "2026-03-20T09:00:00Z"
+}

@@ -1,0 +1,107 @@
+{
+  "id": "pb_01HZK8R4PVBRANCHEXAMPLE02",
+  "version": "1.0.0",
+  "title": "Decide: Mediation or Court?",
+  "description": "Helps a co-parent work through whether to attempt mediation or pursue a court motion for a specific issue. Branches based on conflict type, child safety, and prior mediation history. **Educational decision support, not legal advice.**",
+  "vertical": "family-law",
+  "authorExpertId": "exp_01HZK8R4PVEXPERTANCHOR01",
+  "status": "certified",
+  "tier": "anchor",
+  "jurisdictionTags": [
+    { "level": "state", "code": "US-MO", "scopeNote": "Missouri-specific mediation rules (RSMo 452.372) referenced in some branches." }
+  ],
+  "practiceAreas": ["family-law.mediation", "family-law.decision-support"],
+  "targetRole": ["parent", "advocate"],
+  "estimatedDurationMinutes": 18,
+  "creditCost": { "base": 3, "perStep": 0, "completionBonus": 1 },
+  "licensing": {
+    "contentLicense": "a2x-expert-content-v1",
+    "expertRevenueShareBps": 7000
+  },
+  "steps": [
+    {
+      "id": "st_safetyfirst",
+      "order": 0,
+      "type": "form",
+      "title": "Safety screening",
+      "content": "Is there any current protective order, active DV concern, or child safety issue?",
+      "expectedInputs": [
+        { "name": "hasSafetyIssue", "label": "Active safety concern?", "type": "boolean", "required": true }
+      ]
+    },
+    {
+      "id": "st_safetyroute",
+      "order": 1,
+      "type": "branch",
+      "title": "Route based on safety",
+      "content": "",
+      "branches": [
+        { "condition": "hasSafetyIssue == true", "nextStepId": "st_safetypathend", "label": "Safety issue present — mediation not recommended" },
+        { "condition": "hasSafetyIssue == false", "nextStepId": "st_issuetype", "label": "No immediate safety issue" }
+      ]
+    },
+    {
+      "id": "st_safetypathend",
+      "order": 2,
+      "type": "instruction",
+      "title": "Mediation is generally not appropriate",
+      "content": "When a protective order or active safety concern exists, mediation is generally not appropriate and may put you or your child at risk. Consult a licensed family-law attorney immediately and consider contacting a domestic violence advocate. This playbook will not guide you toward mediation in this situation."
+    },
+    {
+      "id": "st_issuetype",
+      "order": 3,
+      "type": "form",
+      "title": "What kind of issue?",
+      "content": "Select the best fit.",
+      "expectedInputs": [
+        {
+          "name": "issueType",
+          "label": "Issue type",
+          "type": "select",
+          "required": true,
+          "options": ["schedule-change", "relocation", "education-decision", "medical-decision", "financial-child-support", "communication-pattern", "other"]
+        }
+      ]
+    },
+    {
+      "id": "st_historycheck",
+      "order": 4,
+      "type": "form",
+      "title": "Prior mediation history",
+      "content": "Have you tried to resolve this through informal discussion or prior mediation?",
+      "expectedInputs": [
+        { "name": "triedInformal", "label": "Tried direct discussion?", "type": "boolean", "required": true },
+        { "name": "priorMediation", "label": "Attended formal mediation before?", "type": "boolean", "required": true }
+      ]
+    },
+    {
+      "id": "st_recommendation",
+      "order": 5,
+      "type": "prompt",
+      "title": "Generate recommendation",
+      "content": "Based on issue type and prior attempts, the assistant will generate a reasoned recommendation with the tradeoffs of each path. You make the final decision."
+    },
+    {
+      "id": "st_nextsteps",
+      "order": 6,
+      "type": "artifact",
+      "title": "Next steps document",
+      "content": "Produce a one-page summary with: recommended path, reasoning, preparation checklist, and questions for an attorney.",
+      "artifactTemplateId": "at_decisiondoc01"
+    }
+  ],
+  "artifactTemplates": [
+    {
+      "id": "at_decisiondoc01",
+      "name": "Mediation vs Court Decision Summary",
+      "format": "docx",
+      "template": "# Mediation vs Court — Decision Summary\n\n**Issue:** {{issueType}}\n\n## Recommended Path\n\n{{recommendation}}\n\n## Reasoning\n\n{{reasoning}}\n\n## Preparation Checklist\n\n{{checklist}}\n\n## Questions for Your Attorney\n\n{{attorneyQuestions}}\n\n---\n\n*Generated via Access To Experts. Educational decision support, not legal advice.*"
+    }
+  ],
+  "disclosures": {
+    "notLegalAdvice": true
+  },
+  "createdAt": "2026-03-10T10:00:00Z",
+  "updatedAt": "2026-04-01T14:30:00Z",
+  "publishedAt": "2026-03-20T09:00:00Z"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@a2x/playbook-engine",
+  "version": "0.1.0",
+  "description": "Deterministic, auditable execution engine for Access To Experts playbooks. Loads a Playbook, manages Session state, charges credits via the ledger, and invokes model/tool integrations per step.",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@a2x/shared-types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}

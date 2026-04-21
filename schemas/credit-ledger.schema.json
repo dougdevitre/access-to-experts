@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.accesstoexperts.org/credit-ledger.schema.json",
+  "title": "CreditLedgerEntry",
+  "description": "Append-only double-entry ledger record for credit issuance, consumption, and expert payout attribution.",
+  "type": "object",
+  "required": [
+    "id",
+    "accountId",
+    "accountType",
+    "type",
+    "amount",
+    "balanceAfter",
+    "currency",
+    "occurredAt",
+    "idempotencyKey"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^led_[A-Za-z0-9]{16,}$" },
+    "accountId": {
+      "type": "string",
+      "description": "usr_* for consumer accounts, org_* for organization accounts."
+    },
+    "accountType": {
+      "type": "string",
+      "enum": ["user", "organization", "expert-earnings", "institutional-share", "platform-revenue"]
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "purchase",
+        "grant",
+        "refund",
+        "chargeback",
+        "subscription-allocation",
+        "session-charge",
+        "step-charge",
+        "completion-charge",
+        "expert-payout-accrual",
+        "expert-payout-paid",
+        "institutional-accrual",
+        "institutional-paid",
+        "platform-margin",
+        "adjustment",
+        "expiration"
+      ]
+    },
+    "amount": {
+      "type": "integer",
+      "description": "Signed credit amount. Positive = credit to account, negative = debit. One credit = one minor unit."
+    },
+    "balanceAfter": {
+      "type": "integer",
+      "description": "Running balance after this entry is applied."
+    },
+    "currency": {
+      "type": "string",
+      "enum": ["CREDITS", "USD", "EUR", "GBP", "CAD", "AUD"],
+      "description": "CREDITS for in-platform credits; ISO 4217 codes for fiat ledgers."
+    },
+    "sessionId": {
+      "type": ["string", "null"],
+      "pattern": "^sess_[A-Za-z0-9]{16,}$"
+    },
+    "playbookId": {
+      "type": ["string", "null"],
+      "pattern": "^pb_[A-Za-z0-9]{16,}$"
+    },
+    "expertId": {
+      "type": ["string", "null"],
+      "pattern": "^exp_[A-Za-z0-9]{16,}$"
+    },
+    "stripePaymentIntentId": { "type": ["string", "null"] },
+    "stripePayoutId": { "type": ["string", "null"] },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 200,
+      "description": "Prevents double-write of the same event. Enforced unique per account."
+    },
+    "description": { "type": "string", "maxLength": 500 },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "reversalOf": {
+      "type": ["string", "null"],
+      "pattern": "^led_[A-Za-z0-9]{16,}$",
+      "description": "If this entry reverses another (e.g. refund or adjustment), the ID being reversed."
+    }
+  },
+  "additionalProperties": false
+}
