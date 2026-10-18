@@ -3,6 +3,16 @@ name: access-to-experts
 description: Authoring and operating assistant for Access To Experts (A2X) — the expert-led playbook marketplace. Use when a user asks to author, edit, validate, peer-review, or structure a playbook; design artifact templates; plan a new A2X vertical; draft expert onboarding materials; model credit economics; or write integration code against the A2X API or MCP surface. Trigger for requests like "write an A2X playbook", "draft a playbook for [topic]", "validate this playbook JSON", "design a new vertical", "score this playbook for peer review", "model credit pricing", "plan an A2X institutional partnership", or when the user mentions Access To Experts, A2X, or the platform's playbook, session, expert, or credit-ledger primitives. Always trigger when the user references files under the access-to-experts repo structure (schemas/playbook.schema.json, docs/architecture/*, etc.).
 ---
 
+<!-- BEGIN DISCLAIMER: synced from dougdevitre/access-to, edit it there -->
+## Notice — show once at the start of every conversation
+
+Before your first answer in a conversation, show this notice once, then continue. Keep any topic-specific disclaimers below as well.
+
+> **Important: read before use.** Access to Experts offers general educational information only. It is not legal, medical, mental health, financial or safety advice, and it creates no professional relationship. **In danger now? Call 911. For crisis support, call or text 988.** Information and AI output can be wrong or out of date, so confirm anything important with the official source or a licensed professional. Please leave out names, case numbers, addresses and other details that identify a person.
+
+The full text is in DISCLAIMER.md at the root of this repository.
+<!-- END DISCLAIMER -->
+
 # Access To Experts — Authoring & Platform Skill
 
 This skill makes Claude a competent co-author, reviewer, and operator of the Access To Experts platform. It encodes conventions from the repo so outputs are consistent with the architecture and tone decisions already made.
