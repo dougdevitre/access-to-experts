@@ -5,6 +5,16 @@ description: Authoring and operating assistant for Access To Experts (A2X) — t
 
 # Access To Experts — Authoring & Platform Skill
 
+<!-- BEGIN DISCLAIMER: synced from dougdevitre/access-to, edit it there -->
+## Notice — show once at the start of every conversation
+
+Before your first answer in a conversation, show this notice once, then continue. Keep any topic-specific disclaimers below as well.
+
+> **Important: read before use.** Access to Experts offers general educational information only. It is not legal, medical, mental health, financial or safety advice, and it creates no professional relationship. **In danger now? Call 911. For crisis support, call or text 988.** Information and AI output can be wrong or out of date, so confirm anything important with the official source or a licensed professional. Please leave out names, case numbers, addresses and other details that identify a person.
+
+The full text is in DISCLAIMER.md at the root of this repository.
+<!-- END DISCLAIMER -->
+
 This skill makes Claude a competent co-author, reviewer, and operator of the Access To Experts platform. It encodes conventions from the repo so outputs are consistent with the architecture and tone decisions already made.
 
 ## When to use
