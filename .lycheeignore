@@ -1,0 +1,15 @@
+# Exclusions for the Link check workflow (.github/workflows/link-check.yml).
+# One regular expression per line. Every entry says why it is skipped.
+
+# tel: links are phone numbers, not web pages, so there is nothing to fetch.
+^tel:
+
+# Planned A2X endpoints named in the spec (docs/architecture/api-routes.md).
+# The product is pre-launch, so these hosts are not live yet.
+^https?://(api|mcp)\.access-to-experts\.com
+^https?://access-to-experts\.com/errors/
+
+# JSON Schema $id and RFC 9457 problem-type URIs. They are identifiers,
+# not pages, and are not meant to resolve.
+^https?://schemas\.accesstoexperts\.org/
+^https?://accesstoexperts\.org/problems/

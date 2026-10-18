@@ -188,7 +188,7 @@ Anchor deplatforming requires Ethics Board review (given likely high public prof
 
 ### Tax & Payments
 
-- US experts: W-9 required at signup; 1099 issued annually for earnings ≥ $600
+- US experts: W-9 required at signup; 1099 issued annually when earnings meet the IRS reporting threshold ($2,000 starting with payments made in 2026; it was $600 through 2025)
 - International experts: appropriate forms per country; tax treaty handling via Stripe Connect
 
 ---
