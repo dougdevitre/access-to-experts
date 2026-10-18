@@ -90,7 +90,7 @@ During this pre-launch phase, if you are a founding expert contributor, contact 
    - How it was tested
    - Screenshots for UI changes
    - Links to related issues or discussions
-4. **Fill out the PR template** (see [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md)).
+4. **Describe the change in the PR** (what changed, why, and how you tested it). The repo has no PR template yet.
 5. **Request review** from a maintainer.
 6. **Respond to feedback** promptly.
 7. **Squash and merge** once approved.
