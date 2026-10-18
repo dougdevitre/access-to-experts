@@ -31,4 +31,26 @@ body {
 .app-header nav a.active, .app-header nav a:hover { color: var(--accent); }
 
 main { flex: 1; padding: 2rem; max-width: 72rem; width: 100%; margin: 0 auto; }
-.app-footer { padding: 1rem 2rem; border-top: 1px solid var(--border); color: var(--muted); }
+
+/* Persistent disclaimer (every screen). A dark bar reads the same in light
+   and dark mode; 911/988 get 44px touch targets without spreading the text. */
+.disclaimer-notice {
+  padding: 0.625rem 1rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+.disclaimer-notice p { margin: 0 auto; max-width: 72rem; }
+.disclaimer-notice a { color: #ffffff; font-weight: 700; text-underline-offset: 0.15em; }
+.disclaimer-notice a:focus-visible { outline-color: #ffffff; }
+.disclaimer-tel, .disclaimer-more { position: relative; }
+.disclaimer-tel::after, .disclaimer-more::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
+}

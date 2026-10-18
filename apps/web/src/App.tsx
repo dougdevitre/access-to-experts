@@ -1,4 +1,5 @@
 import { Route, Routes, NavLink } from 'react-router-dom';
+import { DisclaimerNotice } from './DisclaimerNotice.js';
 
 /**
  * Stub for the three-pane UI described in docs/architecture/system-overview.md.
@@ -12,6 +13,7 @@ import { Route, Routes, NavLink } from 'react-router-dom';
 export function App() {
   return (
     <div className="app-shell">
+      <DisclaimerNotice />
       <header className="app-header">
         <h1>Access To Experts</h1>
         <nav aria-label="Primary">
@@ -29,10 +31,6 @@ export function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-
-      <footer className="app-footer">
-        <small>Educational guidance. Not legal, medical, or financial advice.</small>
-      </footer>
     </div>
   );
 }
