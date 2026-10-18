@@ -55,6 +55,11 @@ jobs:
       - name: Fail the pull request on broken links
         if: github.event_name == 'pull_request' && steps.lychee.outputs.exit_code != '0'
         run: |
+          # One annotation per broken link, so the failures are readable from the
+          # checks API and the PR page, not only from the job summary.
+          grep -E '^\* \[' lychee/report.md | head -50 | while IFS= read -r line; do
+            echo "::error title=Broken link::${line#\* }"
+          done
           echo "::error::lychee found broken links. The job summary lists each one."
           exit 1
 
