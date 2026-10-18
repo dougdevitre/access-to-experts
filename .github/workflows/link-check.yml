@@ -38,14 +38,16 @@ jobs:
         id: lychee
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
-          # 429 (rate limited) is accepted so a busy site does not read as dead;
-          # a real 404/410/5xx or a dead domain still fails.
+          # 403 and 429 are accepted: many .gov and nonprofit sites answer GitHub's
+          # runners with 403 (bot blocking) or 429 (rate limiting) even when the page
+          # is up, so those codes say nothing about the link. A 404, 410, DNS or
+          # connection failure, or a 5xx that survives the retries still fails.
           args: >-
             --no-progress
             --max-concurrency 8
             --max-retries 3
-            --timeout 30
-            --accept 200..=299,429
+            --timeout 20
+            --accept 200..=299,403,429
             --exclude-loopback
             './**/*.md'
           output: lychee/report.md
