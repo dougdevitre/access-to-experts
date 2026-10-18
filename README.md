@@ -2,6 +2,8 @@
 
 > The system of record where the world's top practitioners package and scale their methodology as guided, executable playbooks.
 
+> Part of **[Access To](https://dougdevitre.org)** — open-source tools for the access gaps that matter most. [See all projects →](https://dougdevitre.org/#pillars)
+
 Access To Experts (A2X) is a world-class expert-led platform that turns vetted expertise into structured, interactive workflows. Instead of selling files or templates, A2X sells **guided outcomes** — executable playbooks authored by credentialed experts, delivered through an AI-guided three-pane interface, metered via credits, and monetized through both consumer subscriptions and enterprise contracts.
 
 This repository contains the full platform specification, data schemas, engineering scaffolding, compliance framework, partnership playbooks, and governance documents.
