@@ -127,7 +127,8 @@ access-to-experts/
 │   └── SKILL.md                       Claude skill for A2X authoring
 │
 ├── scripts/
-│   └── validate-playbook.ts           CLI to validate playbooks against schema
+│   ├── validate-playbook.ts           CLI to validate playbooks against schema
+│   └── build-skill-zip.sh             Builds dist/access-to-experts.zip for claude.ai upload
 │
 └── .github/
     ├── ISSUE_TEMPLATE/
@@ -204,6 +205,23 @@ To explore:
 5. Review [`docs/verticals/v1-family-law.md`](docs/verticals/v1-family-law.md) for the flagship vertical plan.
 
 To contribute, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+### Use as a Claude Skill
+
+Add Access To Experts to Claude at [claude.ai](https://claude.ai) in a few clicks. It works on the Free, Pro, Max, Team and Enterprise plans.
+
+1. **Download the install file:** [access-to-experts.zip](https://github.com/dougdevitre/access-to-experts/releases/download/skill-latest/access-to-experts.zip)
+2. **Don't unzip it.** Claude needs the `.zip` file just as it downloaded.
+3. **Turn on code execution.** Skills need it.
+   - **Free, Pro or Max:** open **Settings > Capabilities** and turn on **Code execution and file creation**.
+   - **Team or Enterprise:** an organization owner opens **Organization settings > Plugins & skills**, clicks the **Policy** tab, and turns on both **Code execution and file creation** and **Skills**.
+4. **Upload it:** open **Customize > Skills**, click **+**, then **+ Create skill**, then **Upload a skill**, and choose `access-to-experts.zip`.
+5. **Turn it on:** in **Customize > Skills**, switch on **access-to-experts**. Claude will now use it for any request to author, validate or review an A2X playbook.
+
+These steps come from Claude's help center: [Use Skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
+If the link 404s, the first release hasn't been published yet.
+
+Maintainers and forks: `scripts/build-skill-zip.sh` builds the same file into `dist/` from `skill/`. The Skill package workflow republishes it on every change to `main`.
 
 ## Roadmap
 

@@ -13,3 +13,8 @@
 # not pages, and are not meant to resolve.
 ^https?://schemas\.accesstoexperts\.org/
 ^https?://accesstoexperts\.org/problems/
+
+# The install file is published by .github/workflows/skill-package.yml when this
+# change reaches main, so it 404s until the first skill-latest release exists.
+# TEMPORARY: remove this line once the release is published.
+^https://github\.com/dougdevitre/access-to-experts/releases/download/skill-latest/
