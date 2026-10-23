@@ -18,8 +18,14 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
-import Ajv, { type ErrorObject } from 'ajv';
-import addFormats from 'ajv-formats';
+// The schemas declare JSON Schema draft 2020-12, which the default `ajv`
+// export (draft-07) does not know; the 2020 build does.
+import { Ajv2020, type ErrorObject, type SchemaObject, type ValidateFunction } from 'ajv/dist/2020.js';
+import addFormatsModule from 'ajv-formats';
+
+// ajv-formats is CommonJS; under NodeNext its default import is the module
+// object, so take the plugin from its `default` export.
+const addFormats = addFormatsModule.default;
 
 const SCHEMA_PATH = resolve(process.cwd(), 'schemas/playbook.schema.json');
 
@@ -29,16 +35,16 @@ interface ValidationResult {
   errors?: ErrorObject[];
 }
 
-function loadSchema(): object {
+function loadSchema(): SchemaObject {
   try {
-    return JSON.parse(readFileSync(SCHEMA_PATH, 'utf8')) as object;
+    return JSON.parse(readFileSync(SCHEMA_PATH, 'utf8')) as SchemaObject;
   } catch (err) {
     console.error(`Could not read schema at ${SCHEMA_PATH}: ${(err as Error).message}`);
     process.exit(2);
   }
 }
 
-function validateFile(ajv: Ajv, validate: ReturnType<Ajv['compile']>, file: string): ValidationResult {
+function validateFile(validate: ValidateFunction, file: string): ValidationResult {
   let data: unknown;
   try {
     data = JSON.parse(readFileSync(file, 'utf8'));
@@ -75,11 +81,11 @@ function main(): void {
   }
 
   const schema = loadSchema();
-  const ajv = new Ajv({ allErrors: true, strict: false });
+  const ajv = new Ajv2020({ allErrors: true, strict: false });
   addFormats(ajv);
   const validate = ajv.compile(schema);
 
-  const results = files.map((f) => validateFile(ajv, validate, resolve(f)));
+  const results = files.map((f) => validateFile(validate, resolve(f)));
   const failed = results.filter((r) => !r.valid);
 
   for (const r of results) {

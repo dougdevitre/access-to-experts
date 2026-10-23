@@ -1,0 +1,49 @@
+name: Checks
+
+# Runs the workspace's own npm scripts so they cannot silently break again:
+# validate:playbooks (example playbooks against schemas/playbook.schema.json),
+# typecheck, lint and test. Each is its own step, so a failure names the script.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Validate, typecheck, lint and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          # package.json "engines": node >=20.11.0
+          node-version: "20"
+
+      - name: Install pnpm (the version in package.json "packageManager")
+        run: npm install -g "$(node -p 'require("./package.json").packageManager')"
+
+      - name: Install dependencies
+        # The repo commits no lockfile yet, so pnpm resolves from package.json.
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Validate example playbooks
+        run: pnpm run validate:playbooks
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Test
+        run: pnpm run test
