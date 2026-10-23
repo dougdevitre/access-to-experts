@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.accesstoexperts.org/playbook.schema.json",
+  "title": "Playbook",
+  "description": "An expert-authored structured workflow that a user executes step-by-step to produce an outcome or artifact.",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "title",
+    "vertical",
+    "authorExpertId",
+    "status",
+    "jurisdictionTags",
+    "practiceAreas",
+    "steps",
+    "creditCost",
+    "licensing",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^pb_[A-Za-z0-9]{16,}$",
+      "description": "Stable unique identifier, e.g. pb_01H...26."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version. Major version changes require re-certification."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 140
+    },
+    "subtitle": {
+      "type": "string",
+      "maxLength": 280
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 4000,
+      "description": "Markdown-formatted description of what the playbook does and who it is for."
+    },
+    "vertical": {
+      "type": "string",
+      "enum": [
+        "family-law",
+        "trial-advocacy",
+        "speaking-business",
+        "civic-government",
+        "mediation-adr",
+        "workforce",
+        "clinical-mental-health",
+        "business-strategy",
+        "education",
+        "other"
+      ]
+    },
+    "authorExpertId": {
+      "type": "string",
+      "pattern": "^exp_[A-Za-z0-9]{16,}$"
+    },
+    "coAuthorExpertIds": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^exp_[A-Za-z0-9]{16,}$" },
+      "maxItems": 10
+    },
+    "institutionalSponsorId": {
+      "type": ["string", "null"],
+      "pattern": "^org_[A-Za-z0-9]{16,}$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_review", "certified", "deprecated", "archived"]
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["anchor", "certified", "emerging"],
+      "description": "Tier mirrors the authoring expert's tier at time of certification."
+    },
+    "jurisdictionTags": {
+      "type": "array",
+      "description": "Jurisdictions where the playbook is valid or relevant. Use ISO codes.",
+      "items": {
+        "type": "object",
+        "required": ["level", "code"],
+        "properties": {
+          "level": {
+            "type": "string",
+            "enum": ["global", "country", "state", "province", "county", "city", "tribal"]
+          },
+          "code": {
+            "type": "string",
+            "description": "ISO 3166 country code (e.g. US), ISO 3166-2 subdivision (e.g. US-MO), or FIPS county code."
+          },
+          "scopeNote": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Optional note on scope limitations in this jurisdiction."
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "practiceAreas": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Taxonomy references (e.g. family-law.custody, civic.public-comment)."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 40 },
+      "maxItems": 30
+    },
+    "targetRole": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "parent",
+          "attorney",
+          "judge",
+          "gal",
+          "therapist",
+          "school-counselor",
+          "advocate",
+          "mediator",
+          "law-enforcement",
+          "speaker",
+          "consultant",
+          "clinician",
+          "researcher",
+          "staff",
+          "citizen",
+          "other"
+        ]
+      }
+    },
+    "estimatedDurationMinutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600
+    },
+    "creditCost": {
+      "type": "object",
+      "required": ["base"],
+      "properties": {
+        "base": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Credits charged on session start."
+        },
+        "perStep": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Credits charged per step execution beyond base."
+        },
+        "completionBonus": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional additional credits charged on completion and artifact generation."
+        }
+      },
+      "additionalProperties": false
+    },
+    "licensing": {
+      "type": "object",
+      "required": ["contentLicense", "expertRevenueShareBps"],
+      "properties": {
+        "contentLicense": {
+          "type": "string",
+          "enum": ["a2x-expert-content-v1", "cc-by-4.0", "proprietary"]
+        },
+        "expertRevenueShareBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000,
+          "description": "Expert revenue share in basis points (7000 = 70%)."
+        },
+        "institutionalShareBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "exclusivity": {
+          "type": "string",
+          "enum": ["none", "platform-exclusive", "vertical-exclusive"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/step" }
+    },
+    "artifactTemplates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/artifactTemplate" }
+    },
+    "prerequisitePlaybookIds": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^pb_[A-Za-z0-9]{16,}$" },
+      "maxItems": 20
+    },
+    "reviewStatus": {
+      "type": "object",
+      "properties": {
+        "peerReviewedAt": { "type": ["string", "null"], "format": "date-time" },
+        "reviewerExpertIds": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^exp_[A-Za-z0-9]{16,}$" }
+        },
+        "lastRegulatoryReviewAt": { "type": ["string", "null"], "format": "date-time" },
+        "reviewNotes": { "type": "string", "maxLength": 4000 }
+      },
+      "additionalProperties": false
+    },
+    "safetyNotes": {
+      "type": "string",
+      "maxLength": 4000,
+      "description": "Author-provided safety, liability, or caution notes shown to user before start."
+    },
+    "disclosures": {
+      "type": "object",
+      "properties": {
+        "notLegalAdvice": { "type": "boolean", "default": true },
+        "notMedicalAdvice": { "type": "boolean", "default": false },
+        "notFinancialAdvice": { "type": "boolean", "default": false },
+        "additionalDisclosures": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 500 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "publishedAt": { "type": ["string", "null"], "format": "date-time" },
+    "deprecatedAt": { "type": ["string", "null"], "format": "date-time" }
+  },
+  "additionalProperties": false,
+
+  "$defs": {
+    "step": {
+      "type": "object",
+      "required": ["id", "order", "type", "title", "content"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^st_[A-Za-z0-9]{8,}$" },
+        "order": { "type": "integer", "minimum": 0 },
+        "type": {
+          "type": "string",
+          "enum": ["instruction", "prompt", "form", "branch", "artifact", "checkpoint", "external-action"]
+        },
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "content": {
+          "type": "string",
+          "description": "Markdown content or structured template body."
+        },
+        "expectedInputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputField" }
+        },
+        "branches": {
+          "type": "array",
+          "description": "For type=branch: conditions that route to other step IDs.",
+          "items": {
+            "type": "object",
+            "required": ["condition", "nextStepId"],
+            "properties": {
+              "condition": { "type": "string", "maxLength": 1000 },
+              "nextStepId": { "type": "string", "pattern": "^st_[A-Za-z0-9]{8,}$" },
+              "label": { "type": "string", "maxLength": 140 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "artifactTemplateId": {
+          "type": "string",
+          "description": "For type=artifact: which template to render."
+        },
+        "timeoutSeconds": { "type": "integer", "minimum": 1 },
+        "creditCostOverride": { "type": "integer", "minimum": 0 },
+        "allowSkip": { "type": "boolean", "default": false },
+        "requiresHumanReview": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    },
+    "inputField": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]{0,63}$" },
+        "label": { "type": "string", "maxLength": 140 },
+        "type": {
+          "type": "string",
+          "enum": ["text", "longtext", "number", "date", "datetime", "select", "multiselect", "boolean", "file"]
+        },
+        "required": { "type": "boolean", "default": false },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "pattern": { "type": "string" },
+            "minLength": { "type": "integer" },
+            "maxLength": { "type": "integer" },
+            "min": { "type": "number" },
+            "max": { "type": "number" }
+          }
+        },
+        "piiClassification": {
+          "type": "string",
+          "enum": ["none", "low", "medium", "high", "phi"],
+          "default": "none"
+        }
+      },
+      "additionalProperties": false
+    },
+    "artifactTemplate": {
+      "type": "object",
+      "required": ["id", "name", "format"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^at_[A-Za-z0-9]{8,}$" },
+        "name": { "type": "string", "maxLength": 140 },
+        "format": { "type": "string", "enum": ["markdown", "docx", "pdf", "json", "csv"] },
+        "template": { "type": "string", "description": "Template body with {{variable}} placeholders." },
+        "description": { "type": "string", "maxLength": 1000 }
+      },
+      "additionalProperties": false
+    }
+  }
+}
