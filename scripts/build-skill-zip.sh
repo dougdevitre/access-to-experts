@@ -14,22 +14,33 @@
 # built from that folder: skill/ is copied to a temp dir, the repo's
 # DISCLAIMER.md and LICENSE are added, and that folder is zipped.
 #
+# SKILL.md tells Claude to validate playbooks against
+# schemas/playbook.schema.json, so the zip ships a copy of it at
+# skill/schemas/playbook.schema.json. The repo-root schemas/ copy stays the
+# canonical one; the build fails if the two differ (see SYNCED below).
+#
 # Usage: scripts/build-skill-zip.sh
 # Exits 1 if the frontmatter fails validation, a required file is missing,
-# or a path SKILL.md names under LINKED_DIRS is not in the zip.
+# a SYNCED copy differs from its canonical file, or a path SKILL.md names
+# under LINKED_DIRS is not in the zip.
 set -euo pipefail
 
 # The skill folder, and the repo-root files added to it.
 SKILL_DIR="skill"
 FROM_REPO=(DISCLAIMER.md LICENSE)
 # What goes into the zip (taken from the skill folder when present).
-INCLUDE=(SKILL.md DISCLAIMER.md LICENSE)
+INCLUDE=(SKILL.md DISCLAIMER.md LICENSE schemas/playbook.schema.json)
 # Files that must be present.
-REQUIRED=(SKILL.md DISCLAIMER.md LICENSE)
+REQUIRED=(SKILL.md DISCLAIMER.md LICENSE schemas/playbook.schema.json)
+# Copies in the skill folder that must stay byte-identical to a canonical
+# repo file, as "canonical:copy" pairs. To change one, edit the canonical
+# file and copy it over.
+SYNCED=(schemas/playbook.schema.json:skill/schemas/playbook.schema.json)
 # Folders whose paths, when SKILL.md names them, must be in the zip. None yet:
-# the paths SKILL.md names (schemas/, docs/, packages/...) are its "repo file
-# map" for people working in a clone, not files the skill ships. Add a folder
-# here when one is added to skill/.
+# most paths SKILL.md names (schemas/*.schema.json, docs/, packages/...) are its
+# "repo file map" for people working in a clone, not files the skill ships; the
+# one schema it ships is in REQUIRED. Add a folder here when every path SKILL.md
+# names under it is in skill/.
 LINKED_DIRS=()
 # Fixed timestamp for every entry, so rebuilds are reproducible.
 FIXED_TIME="2026-01-01 00:00:00"
@@ -47,6 +58,14 @@ done
 [ -f "$SKILL_DIR/SKILL.md" ] || die "$SKILL_DIR/SKILL.md is missing"
 for f in "${FROM_REPO[@]}"; do
   [ -f "$f" ] || die "$f is missing"
+done
+for pair in "${SYNCED[@]}"; do
+  canonical="${pair%%:*}"
+  copy="${pair#*:}"
+  [ -f "$canonical" ] || die "$canonical is missing"
+  [ -f "$copy" ] || die "$copy is missing; copy it from $canonical"
+  cmp -s "$canonical" "$copy" ||
+    die "$copy differs from $canonical; edit $canonical, then copy it over: cp $canonical $copy"
 done
 
 tmp="$(mktemp -d)"
@@ -82,6 +101,7 @@ for item in "${INCLUDE[@]}"; do
   [ -e "$item" ] || continue
   if [ -L "$item" ]; then die "$item is a symlink; the zip only takes regular files"; fi
   if [ -f "$item" ]; then
+    mkdir -p "$stage/$(dirname "$item")"
     cp "$item" "$stage/$item"
     continue
   fi
