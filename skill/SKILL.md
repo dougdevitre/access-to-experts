@@ -19,7 +19,7 @@ This skill makes Claude a competent co-author, reviewer, and operator of the Acc
 
 ## When to use
 
-- User asks to write or edit a **playbook** for any vertical (family law, trial advocacy, speaking business, civic, mediation, workforce, clinical, business, education)
+- User asks to write or edit a **playbook** for any vertical. Use the schema's `vertical` values: `family-law`, `trial-advocacy`, `speaking-business`, `civic-government`, `mediation-adr`, `workforce`, `clinical-mental-health`, `business-strategy`, `education`, or `other`
 - User asks to **validate** a playbook against the schema
 - User asks to **peer-review** or score a playbook
 - User asks to design a **new vertical**, playbook set, or artifact template
@@ -32,7 +32,7 @@ This skill makes Claude a competent co-author, reviewer, and operator of the Acc
 
 **Tone (always):** calm, professional, empathetic, practical. Child-centered and trauma-informed in all family-law, clinical, and mediation contexts. No hype. No inflammatory language. No accusations.
 
-**Legal/medical/financial disclaimers (always):** Playbooks are educational guidance, not advice. Include `disclosures` in every playbook. Suggest consulting a licensed professional where relevant. Never invent statutes or case citations.
+**Legal/medical/financial disclaimers (always):** Playbooks are educational guidance, not advice. Include `disclosures` in every playbook (the schema requires it). Suggest consulting a licensed professional where relevant. Never invent statutes or case citations.
 
 **Jurisdiction (always):** Every playbook declares `jurisdictionTags`. Default to `global` only for truly universal content. Legal/regulated verticals should be state/province-scoped.
 
@@ -50,7 +50,11 @@ When asked to author a playbook, follow this sequence:
    - Estimated duration?
 
 2. **Draft structure**
-   - Start with a safety checkpoint if the topic touches conflict, harm, or vulnerable populations
+   - Start with a safety checkpoint if the topic touches conflict, harm, or vulnerable populations. Put it at `order: 0`, as a `checkpoint` step or a `form` step followed by a `branch`. It must:
+     - ask whether the user, and any child involved, is safe right now
+     - tell the user to pause the playbook if they are in danger now, and point to the lines in the notice above (911; 988 for crisis support, call or text), or the local equivalents outside the US
+     - for family-law, mediation, and other conflict playbooks, ask about protective orders and active domestic-violence or child-safety concerns, and branch away from mediation steps when one exists (see "What not to do")
+     - let the user stop or pause without losing their work
    - 3–8 steps is the sweet spot. More than 12 usually means the playbook should split
    - Include at least one form step (structured input) and one artifact step (produced output)
    - Branch only when it materially changes the next steps, not for aesthetics
@@ -69,11 +73,12 @@ When asked to author a playbook, follow this sequence:
 5. **Add disclosures**
    - `notLegalAdvice: true` for any legal-adjacent playbook (not just family law — civic, workforce, business)
    - `notMedicalAdvice: true` for any clinical or health-adjacent content
+   - `notFinancialAdvice: true` for any business, workforce, pricing, credit, or other money-adjacent playbook (`business-strategy`, `workforce`, and any playbook about fees, revenue, debt, or credit)
    - Add `additionalDisclosures` for statute freshness, UPL concerns, jurisdictional variance
 
 6. **Validate**
-   - Output must validate against `schemas/playbook.schema.json`
-   - Offer to run `scripts/validate-playbook.ts` if the user has the repo locally
+   - Output must validate against `schemas/playbook.schema.json` (shipped with this skill)
+   - If the user has the repo checked out, offer to run `pnpm validate:playbooks` or `tsx scripts/validate-playbook.ts <file>`. The script is not shipped with the skill
 
 ## Peer-review checklist
 
@@ -105,15 +110,28 @@ When asked to design a new vertical, produce:
 5. **Launch criteria** — what "ready to publish" looks like
 6. **Cross-vertical bridges** — how this vertical compounds the existing user base
 
-Template: follow the shape of `docs/verticals/v1-family-law.md`.
+Template: use this section order. It mirrors `docs/verticals/v1-family-law.md`, which exists only in a clone of the repo, not in this skill.
+
+1. Why this vertical (and why now)
+2. Scope: primary jurisdictions, practice areas, target users
+3. Content plan: flagship playbooks grouped by theme, each with a one-line description
+4. Authoring sources: anchor experts, institutions, reviewers
+5. Compliance posture: disclaimers, safety screens, UPL and other regulatory limits, sensitive populations
+6. Integration with existing platforms and verticals
+7. Target institutional partners
+8. Success metrics
+9. Risks and mitigations
+10. Learning goals
+11. Related documents
 
 ## Credit economics
 
-Default unit economics (from `docs/unit-economics.md`):
+Default unit economics. These are working assumptions summarized from `docs/unit-economics.md`, which exists only in a clone of the repo, not in this skill. Every share is taken from gross user-paid revenue (credits × retail price), the same base the credit ledger uses for expert earnings:
 - Retail: ~$0.15/credit
-- Platform cost: ~$0.045/credit (infra + model + payment processing)
-- Expert share: 70% standard, 60% with 10% institutional share
-- Platform margin target: ~17% per completion after expert + institutional shares
+- Expert share: 70% of gross standard (`expertRevenueShareBps: 7000`). Anchor deals may be 60%, with an institutional share (`institutionalShareBps`, e.g. 1000 = 10%) also taken from gross
+- Platform cost: the doc gives two figures. Its cost-floor table says ~$0.045/credit. Its 40-credit reference completion costs $0.80 (~$0.02/credit)
+- Platform margin: ~17% of gross only at the ~$0.02/credit cost. Example: 40 credits × $0.15 = $6.00; expert 70% = $4.20; platform keeps $1.80; costs $0.80; margin $1.00 (16.7%). The 60% + 10% split gives the same ~17%. At the $0.045/credit cost floor, either split leaves 0% ($0.15 × 30% = $0.045)
+- When modeling, state the cost per credit you used and show the margin at both cost figures. Don't present ~17% as a settled target
 
 When pricing a new playbook, ask:
 - Duration (minutes) → baseline credit count (roughly 1 credit per 2–3 minutes of guided work)
@@ -139,7 +157,9 @@ When writing integration code:
 - Do not write anything that assumes mediation is appropriate when there is an active safety concern — that is a hard rule
 - Do not reproduce copyrighted content in playbook text (paraphrase, summarize, cite)
 
-## Repo file map (for reference)
+## Repo file map (only in a clone of the repo)
+
+This skill ships only `SKILL.md`, `DISCLAIMER.md`, `LICENSE`, and `schemas/playbook.schema.json`. The paths below exist only if the user has the access-to-experts repo checked out. Don't tell the user to open them, or say you have read them, unless they are available.
 
 - Canonical schemas: `schemas/*.schema.json`
 - Schema examples: `schemas/examples/*.json`

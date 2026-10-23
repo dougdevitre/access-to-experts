@@ -26,5 +26,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - GitHub issue and PR templates; CI workflow with typecheck, lint, test, schema validation, and secret scanning
 - Monorepo tooling: pnpm workspaces, base tsconfig, editorconfig, gitignore
 
+### Changed
+- `schemas/playbook.schema.json`: `disclosures` is now a required top-level field (the `Playbook` TypeScript type matches). All three schema examples already include it.
+- `skill/SKILL.md`: uses the schema's vertical names; says what a safety checkpoint must contain; adds `notFinancialAdvice` for business, workforce and credit playbooks; states the base for each revenue share and shows the margin arithmetic at both cost figures in `docs/unit-economics.md`; marks the repo paths it names as available only in a clone; inlines the vertical-doc section order.
+
 ### Notes
 - No user-facing release yet. Phase 1 (MVP) targets the first certified playbook library for the family-law vertical with CoTrackPro as the anchor integration.
