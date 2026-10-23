@@ -135,7 +135,7 @@ export interface Playbook {
   prerequisitePlaybookIds?: PlaybookId[];
   reviewStatus?: ReviewStatus;
   safetyNotes?: string;
-  disclosures?: Disclosures;
+  disclosures: Disclosures;
   createdAt: ISODateTime;
   updatedAt: ISODateTime;
   publishedAt?: ISODateTime | null;
