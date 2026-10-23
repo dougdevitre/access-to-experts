@@ -97,7 +97,7 @@ export interface Licensing {
   exclusivity?: Exclusivity;
 }
 
-export interface ReviewStatus {
+export interface PlaybookReviewStatus {
   peerReviewedAt?: ISODateTime | null;
   reviewerExpertIds?: ExpertId[];
   lastRegulatoryReviewAt?: ISODateTime | null;
@@ -133,7 +133,7 @@ export interface Playbook {
   steps: Step[];
   artifactTemplates?: ArtifactTemplate[];
   prerequisitePlaybookIds?: PlaybookId[];
-  reviewStatus?: ReviewStatus;
+  reviewStatus?: PlaybookReviewStatus;
   safetyNotes?: string;
   disclosures: Disclosures;
   createdAt: ISODateTime;
