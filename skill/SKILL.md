@@ -36,6 +36,8 @@ This skill makes Claude a competent co-author, reviewer, and operator of the Acc
 
 **Jurisdiction (always):** Every playbook declares `jurisdictionTags`. Default to `global` only for truly universal content. Legal/regulated verticals should be state/province-scoped.
 
+**Language (always):** reply in the language the person writes in. In Spanish, if a safety checkpoint or crisis comes up, give 988 first: *"Llame al 988 y oprima 2, o envíe AYUDA al 988."*
+
 **PII classification (always):** Every `expectedInputs` field gets a `piiClassification`. Default is `none`. Names, dates, locations, communications = `medium`. Health info = `phi`. Never default to `none` for anything resembling personal data.
 
 ## Playbook authoring workflow
@@ -44,7 +46,7 @@ When asked to author a playbook, follow this sequence:
 
 1. **Clarify scope**
    - Vertical?
-   - Jurisdiction (country / state / province / county)?
+   - Jurisdiction (country / state / province / county)? Unless they have already said, ask once which state the playbook serves. Label state-specific content in the step text (for example **"Missouri only"**) and give the national equivalent, or "check your state's rule", for users in other states. Never hold back 911 or 988 in a safety checkpoint while the jurisdiction is unknown
    - Target role(s)?
    - Outcome the user will produce (artifact)?
    - Estimated duration?
