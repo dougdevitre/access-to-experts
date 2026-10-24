@@ -1,5 +1,5 @@
 {
-  "$comment": "Fact ledger: every phone number, dollar figure, deadline and program-status claim this skill states with an external source, verified on that source, with the date and the files that carry it. scripts/check-facts.mjs fails CI when a fact is past its recheck date, a listed file is missing, or the value no longer appears in any listed file. Only add an entry you verified on its source that day; never back-date. The credit-economics figures in skill/SKILL.md ($0.15/credit, 70% expert share, cost per credit) are this product's own design parameters, not externally sourced facts, so they are not ledger entries.",
+  "$comment": "Fact ledger: every phone number, dollar figure, deadline and program-status claim this skill states with an external source, verified on that source, with the date and the files that carry it. scripts/check-facts.mjs fails CI when a fact is past its recheck date, a listed file is missing, or the value (or each string in match) no longer appears in its listed files. Recheck intervals: phone numbers 180 days; dollar figures and program status 90; annual-cycle figures use recheck_on with the next cycle's date. Only add an entry you verified on its source that day; never back-date. The credit-economics figures in skill/SKILL.md ($0.15/credit, 70% expert share, cost per credit) are this product's own design parameters, not externally sourced facts, so they are not ledger entries.",
   "recheck_days_default": 90,
   "facts": [
     {
@@ -7,7 +7,7 @@
       "claim": "988 Suicide & Crisis Lifeline: call or text 988, 24/7",
       "value": "988",
       "source": "https://988lifeline.org/",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "DISCLAIMER.md",
